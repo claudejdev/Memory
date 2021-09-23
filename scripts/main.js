@@ -5,10 +5,10 @@ const divPlayground = document.querySelector("#playground");
 
 //the 16 tiles in 4 rows of 4 columns
 let gridTiles = new Array(
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0]
+    [0,0,4,8],
+    [0,1,5,9],
+    [0,2,6,10],
+    [0,3,7,0]
 );
 showTiles(); //cf. hoisting https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#function_declaration_hoisting
 
@@ -27,7 +27,7 @@ function showTiles() {
             gridTiles[i][j] === 0?
             txt +='<button type="button" class="btn btn-primary m-2" style="width:100px;height:100px">Show</button>'
             :
-            txt += '<img src="+getImage(gridTiles[i][j])+" style="width:100px;height:100px" class="m-2">';
+            txt += "<img src='"+getImage(gridTiles[i][j])+"' style='width:100px;height:100px' class='m-2'>";
             //TODO: proper CSS file
             
         }
