@@ -11,12 +11,14 @@ let tiles = new Array(
     [0,0,0,0]
 );
 
-let results = new Array(
-    [1,6,5,4],
-    [8,2,3,8],
-    [7,3,2,7],
-    [4,6,5,1]
-);
+// let results = new Array(
+//     [1,6,5,4],
+//     [8,2,3,8],
+//     [7,3,2,7],
+//     [4,6,5,1]
+//
+let results = randomArrayGenerator();
+
 
 let previousClick = [];
 let clickCounter = 0;
@@ -26,7 +28,7 @@ showTiles(); //cf. hoisting https://developer.mozilla.org/en-US/docs/Web/JavaScr
 
 
 function showTiles() {
-//?the image displayed depends of the value of the array's element at [i][j] :
+//?the image displayed match the value of the array's element at [i][j] :
 //? if it's 0, then a button is displayed
 //? otherwise, an image is selected. Cf. function getImage
 
@@ -37,9 +39,9 @@ function showTiles() {
         //2nd loop that  iterates in the 2nd dimension of the array
         for (let j = 0; j < tiles[i].length; j++) { 
             tiles[i][j] === 0?
-            txt +="<button class='btn btn-primary m-2' style='width:100px;height:100px' onClick='check(\""+i+"-"+j+"\")'>Show</button>"
+            txt +="<button class='btn btn-primary m-2 ' style='width:6.25rem;height:6.25rem' onClick='check(\""+i+"-"+j+"\")'><i class='bi bi-eye-fill'></i></button>"
             :
-            txt += "<img src='"+getImage(tiles[i][j])+"' style='width:100px;height:100px' class='m-2'>";
+            txt += "<img src='"+getImage(tiles[i][j])+"' style='width:6.25rem;height:6.25rem' class='m-2'>";
             //TODO: proper CSS file
             
         }
@@ -87,8 +89,6 @@ function getImage(key) {
     }
     return imgPath;
 }
-// Images from : https://www.kenney.nl/
-
 //receive the coordinates of the clicked button
 function check(clicked) {
     if (ready) {
@@ -129,4 +129,30 @@ function check(clicked) {
     }
 
 }
-//TODO: difficulty level, more images, short timeout
+// random results array
+
+function randomArrayGenerator (){
+    let rndArray = new Array();
+
+    let imageIndexes = new Array(0,0,0,0,0,0,0,0); 
+    //Generate a 16 cells table
+    for (let i = 0; i < 4; i++) {
+        let line = new Array();
+        for (let j = 0; j < 4; j++) {
+            let found = false;//found a match in imageIndexes
+            while ((!found)) {
+                let rndImage = Math.floor(Math.random() * 8);
+                if (imageIndexes[rndImage] < 2) {
+                    line.push(rndImage+1);
+                    imageIndexes[rndImage]++;
+                    found = true;                
+                }
+            }
+
+        }
+        rndArray.push(line);
+    }
+    return rndArray;
+}
+
+//TODO: difficulty level, more images, short timeout. Score bar. Reset button. Timer.
