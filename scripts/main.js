@@ -4,12 +4,24 @@ const divPlayground = document.querySelector("#playground");
 
 
 //the 16 tiles in 4 rows of 4 columns
-let gridTiles = new Array(
-    [0,0,4,8],
-    [0,1,5,9],
-    [0,2,6,10],
-    [0,3,7,0]
+let tiles = new Array(
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0]
 );
+
+let results = new Array(
+    [1,6,5,4],
+    [8,2,3,8],
+    [7,3,2,7],
+    [4,6,5,1]
+);
+
+let previousClick = [];
+let clickCounter = 0;
+let ready = true;
+
 showTiles(); //cf. hoisting https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#function_declaration_hoisting
 
 
@@ -18,20 +30,20 @@ function showTiles() {
 //? if it's 0, then a button is displayed
 //? otherwise, an image is selected. Cf. function getImage
 
-    let txt = '';
+    let txt = "";
     //1st loop which iterates in the 1st dimension of this array
-    for (let i = 0; i < gridTiles.length; i++) {
-        txt += '<div>';
+    for (let i = 0; i < tiles.length; i++) {
+        txt += "<div>";
         //2nd loop that  iterates in the 2nd dimension of the array
-        for (let j = 0; j < gridTiles[i].length; j++) { 
-            gridTiles[i][j] === 0?
-            txt +='<button type="button" class="btn btn-primary m-2" style="width:100px;height:100px">Show</button>'
+        for (let j = 0; j < tiles[i].length; j++) { 
+            tiles[i][j] === 0?
+            txt +="<button class='btn btn-primary m-2' style='width:100px;height:100px' onClick='check(\""+i+"-"+j+"\")'>Show</button>"
             :
-            txt += "<img src='"+getImage(gridTiles[i][j])+"' style='width:100px;height:100px' class='m-2'>";
+            txt += "<img src='"+getImage(tiles[i][j])+"' style='width:100px;height:100px' class='m-2'>";
             //TODO: proper CSS file
             
         }
-        txt += '</div>';
+        txt += "</div>";
     }
     divPlayground.innerHTML = txt;
 }
@@ -76,3 +88,45 @@ function getImage(key) {
     return imgPath;
 }
 // Images from : https://www.kenney.nl/
+
+//receive the coordinates of the clicked button
+function check(clicked) {
+    if (ready) {
+        clickCounter++; //increment click's counter
+        //!substr !== substring https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring
+        let line = clicked.substr(0,1);
+        let column = clicked.substr(2,1);
+        // console.log(line);    
+        // console.log(column);  
+        //assign the coordinates from the results array to the tiles one. 
+        tiles[line][column] = results[line][column];
+        //then show the tile again by executing the function
+        showTiles();
+    
+        //check how many clicks, if two then , 
+        if (clickCounter>1) {
+            ready = false;
+            //Delay to let the user see the second image
+            setTimeout(() => {
+                //if the previously clicked doesn't match with the the last click, prepare the button
+                if (tiles[line][column] !== results[previousClick[0]][previousClick[1]]) {
+                    tiles[line][column] = 0;
+                    tiles[previousClick[0]][previousClick[1]] = 0;
+                }
+                //then show the tile again
+                showTiles();
+                ready = true;
+                //and thus reset the counter to 0
+                clickCounter = 0;
+                //we need to know which tile was clicked, then compare 
+                previousClick = [line,column];
+            },1000)
+        } else {
+            //we need to know which tile was clicked, then compare 
+            previousClick = [line,column];
+        }
+
+    }
+
+}
+//TODO: difficulty level, more images, short timeout
