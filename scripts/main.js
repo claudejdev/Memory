@@ -1,4 +1,4 @@
-// memory game, Claude J, 230921, rev 0.1
+// memory game, Claude J, 230921, rev 0.1 MVP
 const divPlayground = document.querySelector("#playground");
 //divPlayground.innerHTML = "<| Hello World |>";
 
@@ -154,5 +154,3 @@ function randomArrayGenerator (){
     }
     return rndArray;
 }
-
-//TODO: difficulty level, more images, short timeout. Score bar. Reset button. Timer.
